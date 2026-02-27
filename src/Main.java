@@ -13,11 +13,24 @@ class PalindromeCheckerApp{
         String reversed = "";
 
 
-        for (int i = input.length() - 1; i >= 0; i--) {
-            reversed = reversed + input.charAt(i);
+        char[] chars = input.toCharArray();
+
+        int start = 0;
+        int end = chars.length - 1;
+        boolean isPalindrome = true;
+
+
+        while (start < end) {
+            if (chars[start] != chars[end]) {
+                isPalindrome = false;
+                break;
+            }
+            start++;
+            end--;
         }
 
-        if (input.equals(reversed)) {
+
+        if (isPalindrome) {
             System.out.println("Is it a Palindrome? : true");
         } else {
             System.out.println("Is it a Palindrome? : false");
