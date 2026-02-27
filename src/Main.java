@@ -1,28 +1,40 @@
 import java.util.Scanner;
 
-class PalindromeCheckerApp{
+class PalindromeService {
 
-    public static boolean isPalindrome(String str, int start, int end) {
+    public boolean isPalindrome(String input) {
 
-        while (start < end && !Character.isLetterOrDigit(str.charAt(start))) {
-            start++;
-        }
-
-        while (start < end && !Character.isLetterOrDigit(str.charAt(end))) {
-            end--;
-        }
-
-        if (start >= end) {
-            return true;
-        }
-
-        if (Character.toLowerCase(str.charAt(start)) !=
-                Character.toLowerCase(str.charAt(end))) {
+        if (input == null) {
             return false;
         }
 
-        return isPalindrome(str, start + 1, end - 1);
+        int start = 0;
+        int end = input.length() - 1;
+
+        while (start < end) {
+
+            while (start < end && !Character.isLetterOrDigit(input.charAt(start))) {
+                start++;
+            }
+
+            while (start < end && !Character.isLetterOrDigit(input.charAt(end))) {
+                end--;
+            }
+
+            if (Character.toLowerCase(input.charAt(start)) !=
+                    Character.toLowerCase(input.charAt(end))) {
+                return false;
+            }
+
+            start++;
+            end--;
+        }
+
+        return true;
     }
+}
+
+class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
@@ -31,7 +43,11 @@ class PalindromeCheckerApp{
         System.out.print("Enter a string: ");
         String input = sc.nextLine();
 
-        if (isPalindrome(input, 0, input.length() - 1)) {
+        PalindromeService service = new PalindromeService();
+
+        boolean result = service.isPalindrome(input);
+
+        if (result) {
             System.out.println("Is it a Palindrome? : true");
         } else {
             System.out.println("Is it a Palindrome? : false");
