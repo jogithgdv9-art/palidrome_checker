@@ -1,21 +1,17 @@
 import java.util.Scanner;
 import java.util.Stack;
 
-class PalindromeCheckerApp {
+public class PalindromeCheckerApp {
 
     // Strategy Interface
     interface PalindromeStrategy {
         boolean check(String input);
     }
 
-    // Two Pointer Strategy (Optimized)
+    // Two Pointer Strategy
     static class TwoPointerStrategy implements PalindromeStrategy {
-
         @Override
         public boolean check(String input) {
-
-            if (input == null) return false;
-
             int start = 0;
             int end = input.length() - 1;
 
@@ -26,27 +22,20 @@ class PalindromeCheckerApp {
                 start++;
                 end--;
             }
-
             return true;
         }
     }
 
     // Stack Strategy
     static class StackStrategy implements PalindromeStrategy {
-
         @Override
         public boolean check(String input) {
-
-            if (input == null) return false;
-
             Stack<Character> stack = new Stack<>();
 
-// Push characters into stack
             for (char c : input.toCharArray()) {
                 stack.push(c);
             }
 
-// Compare while popping
             for (char c : input.toCharArray()) {
                 if (c != stack.pop()) {
                     return false;
@@ -57,16 +46,18 @@ class PalindromeCheckerApp {
         }
     }
 
+    // Reverse String Method
+    public static boolean reversePalindrome(String input) {
+        String reversed = new StringBuilder(input).reverse().toString();
+        return input.equals(reversed);
+    }
+
     // Context Class
     static class PalindromeContext {
 
         private PalindromeStrategy strategy;
 
         public PalindromeContext(PalindromeStrategy strategy) {
-            this.strategy = strategy;
-        }
-
-        public void setStrategy(PalindromeStrategy strategy) {
             this.strategy = strategy;
         }
 
@@ -86,7 +77,7 @@ class PalindromeCheckerApp {
         System.out.print("Enter choice: ");
 
         int choice = sc.nextInt();
-        sc.nextLine(); // consume newline
+        sc.nextLine();
 
         System.out.print("Enter a string: ");
         String input = sc.nextLine();
@@ -99,15 +90,37 @@ class PalindromeCheckerApp {
             strategy = new StackStrategy();
         }
 
+        // Strategy Pattern Execution
         PalindromeContext context = new PalindromeContext(strategy);
 
+        long startTime = System.nanoTime();
         boolean result = context.execute(input);
+        long endTime = System.nanoTime();
+        long strategyTime = endTime - startTime;
 
-        if (result) {
-            System.out.println("Is it a Palindrome? : true");
-        } else {
-            System.out.println("Is it a Palindrome? : false");
-        }
+        // Reverse Method Timing
+        startTime = System.nanoTime();
+        boolean reverseResult = reversePalindrome(input);
+        endTime = System.nanoTime();
+        long reverseTime = endTime - startTime;
+
+        // Stack Direct Method Timing
+        startTime = System.nanoTime();
+        boolean stackResult = new StackStrategy().check(input);
+        endTime = System.nanoTime();
+        long stackTime = endTime - startTime;
+
+        System.out.println("\nPalindrome Check for: " + input);
+        System.out.println("--------------------------------");
+
+        System.out.println("Chosen Strategy Result: " + result);
+        System.out.println("Execution Time: " + strategyTime + " ns");
+
+        System.out.println("\nReverse String Method: " + reverseResult);
+        System.out.println("Execution Time: " + reverseTime + " ns");
+
+        System.out.println("\nStack Method: " + stackResult);
+        System.out.println("Execution Time: " + stackTime + " ns");
 
         sc.close();
     }
